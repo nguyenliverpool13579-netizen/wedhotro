@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kho Công Cụ Giáo Viên</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700;900&display=swap');
+
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --primary: #4F46E5;
+            /* Indigo for education */
+            --secondary: #10B981;
+            /* Emerald for growth */
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #ffffff;
+            color: #1f2937;
+            overflow-x: hidden;
+            /* Light educational background */
+            background-image: radial-gradient(circle at 15% 50%, rgba(79, 70, 229, 0.05), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.05), transparent 25%);
+        }
+
+        /* Tinh chỉnh thanh cuộn */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--primary), var(--secondary));
+            border-radius: 10px;
+        }
+
+        /* Hiệu ứng Kính cực xịn */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Sidebar Animation */
+        .sidebar {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(249, 250, 251, 0.95) 100%);
+            border-right: 1px solid rgba(79, 70, 229, 0.1);
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .sidebar.collapsed .nav-text {
+            display: none;
+        }
+
+        .sidebar.collapsed .submenu {
+            display: none;
+        }
+
+        .nav-item {
+            position: relative;
+            transition: 0.3s;
+            overflow: hidden;
+            border-radius: 8px;
+            margin: 4px 8px;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            transform: scaleY(0);
+            transition: 0.3s;
+            transform-origin: bottom;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .nav-item:hover::before,
+        .nav-item.active::before {
+            transform: scaleY(1);
+        }
+
+        .nav-item:hover {
+            background: rgba(79, 70, 229, 0.1);
+            padding-left: 1.5rem;
+            color: #1f2937;
+            transform: translateX(4px);
+        }
+
+        .nav-item.active {
+            background: rgba(79, 70, 229, 0.15);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: rgba(79, 70, 229, 0.05);
+            border-radius: 8px;
+            margin: 4px 8px;
+        }
+
+        .submenu.show {
+            max-height: 200px;
+        }
+
+        .submenu-item {
+            padding: 8px 16px;
+            color: #6b7280;
+            text-decoration: none;
+            display: block;
+            transition: 0.2s;
+            border-radius: 4px;
+            margin: 2px 4px;
+        }
+
+        .submenu-item:hover {
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary);
+        }
+
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+
+        /* Video Card 3D Hover */
+        .anime-card {
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.5s;
+        }
+
+        .anime-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 50%);
+            opacity: 0.8;
+            transition: 0.3s;
+        }
+
+        .anime-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(79, 70, 229, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            z-index: 10;
+        }
+
+        .anime-card img {
+            transition: 0.7s;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .anime-card:hover img {
+            transform: scale(1.1);
+            filter: brightness(0.7);
+        }
+
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            opacity: 0;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 20;
+        }
+
+        .anime-card:hover .play-btn {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Hero Banner Animation */
+        .hero-banner {
+            animation: bgPan 20s linear infinite alternate;
+            background-size: 150%;
+        }
+
+        @keyframes bgPan {
+            0% {
+                background-position: left center;
+            }
+
+            100% {
+                background-position: right center;
+            }
+        }
+
+        /* Chat Box Animations */
+        #chat-wrapper {
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .chat-msg {
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+        }
+
+        @keyframes popIn {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 4px;
+            height: 4px;
+            background: #a855f7;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+
+        .typing-indicator span:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1);
+            }
+        }
+
+        /* Admin Dashboard Override */
+        #admin-panel {
+            backdrop-filter: blur(20px);
+            transition: 0.4s;
+        }
+    </style>
+</head>
+
+<body class="flex h-screen overflow-hidden">
+
+    <script>
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) window.location.href = 'modau.html';
+    </script>
+
+    <aside id="sidebar" class="w-64 glass-panel h-full flex flex-col z-50 border-r border-gray-200 relative sidebar">
+        <div class="p-6 flex items-center gap-4">
+            <button onclick="toggleSidebar()" class="absolute top-4 right-4 text-gray-600 hover:text-indigo-600 transition">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="relative group cursor-pointer">
+                <img src="avatar.png"
+                    class="w-12 h-12 rounded-xl object-cover border-2 border-indigo-500 shadow-[0_0_15px_rgba(79,70,229,0.5)]">
+                <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white">
+                </div>
+            </div>
+            <div>
+                <h2
+                    class="font-black text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-emerald-600">
+                    Arya_San</h2>
+                <p id="user-role-text" class="text-[10px] text-gray-600 uppercase tracking-widest font-bold">Premium
+                    Member</p>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-4 space-y-2 mt-4">
+            <a href="#"
+                class="nav-item active flex items-center gap-4 p-3 rounded-lg text-indigo-600 font-bold"><i
+                    class="fas fa-home w-5"></i> <span class="nav-text">Trang Chủ</span></a>
+            <a href="thinhhanh.html" class="nav-item flex items-center gap-4 p-3 rounded-lg text-gray-600 font-bold"><i
+                    class="fas fa-fire w-5"></i> <span class="nav-text">Thịnh Hành</span></a>
+            <div class="nav-item">
+                <a href="#" onclick="toggleSubmenu('explore')" class="flex items-center gap-4 p-3 rounded-lg text-gray-600 font-bold w-full text-left">
+                    <i class="fas fa-compass w-5"></i> <span class="nav-text">Khám Phá</span> <i class="fas fa-chevron-down ml-auto transition transform" id="explore-icon"></i>
+                </a>
+                <div class="submenu" id="explore-submenu">
+                    <a href="baigiang.html" class="submenu-item">Bài Giảng Hữu Ích</a>
+                    <a href="tranhhoc10.html" class="submenu-item">Tranh Học 10</a>
+                    <a href="#" class="submenu-item">Tài Liệu Giáo Dục</a>
+                </div>
+            </div>
+            <a href="#" onclick="openUpload()"
+                class="nav-item flex items-center gap-4 p-3 rounded-lg text-gray-600 font-bold"><i
+                    class="fas fa-cloud-upload-alt w-5"></i> <span class="nav-text">Đăng Tải video giảng dậy</span></a>
+            <div class="my-4 border-t border-gray-200"></div>
+            <a href="#" id="admin-btn" onclick="openAdmin()"
+                class="hidden nav-item flex items-center gap-4 p-3 rounded-lg text-red-600 font-bold"><i
+                    class="fas fa-user-shield w-5"></i> <span class="nav-text">Admin Panel</span></a>
+        </nav>
+
+        <div class="p-6 border-t border-gray-200">
+            <button onclick="logout()"
+                class="w-full py-2 rounded-lg border border-gray-300 text-gray-600 hover:text-gray-900 hover:border-gray-900 hover:bg-gray-50 transition font-bold text-sm">
+                <i class="fas fa-sign-out-alt mr-2"></i> Đăng Xuất
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 h-full overflow-y-auto relative pb-20">
+
+
+        <header
+            class="sticky top-0 z-40 glass-panel px-8 py-4 border-b border-white/5 flex justify-between items-center">
+            <div class="relative w-96 group">
+                <i
+                    class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-indigo-600 transition"></i>
+                <input type="text" placeholder="Tìm bài giảng, học sinh, tài liệu..." class=" w-full bg-white/5 border border-gray-200 rounded-2xl py-2 pl-12 pr-4 outline-none
+                    focus:border-indigo-600 focus:bg-white/10 transition text-sm">
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="text-right hidden md:block">
+                    <p class="text-sm font-bold text-gray-900" id="top-email">user@mail.com</p>
+                    <p class="text-[10px] text-green-600 flex items-center justify-end gap-1"><i
+                            class="fas fa-wifi"></i> Online <span id="online-counter">1,204</span></p>
+                </div>
+                <button
+                    class="w-10 h-10 rounded-xl bg-white/5 border border-gray-200 flex items-center justify-center hover:bg-indigo-600/20 hover:text-indigo-600 transition relative">
+                    <i class="fas fa-bell"></i>
+                    <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
+                    <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+                </button>
+            </div>
+        </header>
+
+
+        <div class="p-8">
+
+            <!-- HERO BANNER FIXED -->
+            <div class="relative w-full h-[420px] rounded-[30px] overflow-hidden shadow-2xl border border-white/10">
+
+                <!-- ẢNH NỀN -->
+                <img src="images (1).jpg" class="absolute inset-0 w-full h-full object-cover object-center">
+
+                <!-- LỚP PHỦ TỐI -->
+                <div class="absolute inset-0 bg-gradient-to-r from-white/70 via-white/50 to-transparent"></div>
+
+                <!-- CONTENT -->
+                <div class="relative z-10 h-full flex flex-col justify-center p-12">
+
+                    <span
+                        class="px-3 py-1 bg-gradient-to-r from-indigo-600 to-emerald-600 rounded-lg text-[10px] font-bold w-fit mb-4 uppercase tracking-wider shadow-[0_0_15px_rgba(79,70,229,0.3)]">
+                        Hệ thống hỗ trợ giáo viên
+                    </span>
+
+                    <h1 class="text-5xl md:text-6xl font-black text-gray-900 mb-4 leading-tight">
+                        Teacher <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-emerald-600">
+                            Support System
+                        </span>
+                    </h1>
+
+                    <p class="text-gray-600 max-w-lg text-sm mb-8 leading-relaxed">
+                        Nền tảng giúp giáo viên quản lý lớp học, bài giảng và học sinh.
+                        Tạo bài tập, quản lý điểm và hỗ trợ học tập hiệu quả hơn.
+                    </p>
+
+                </div>
+                <section class="px-8 mb-12">
+                    <div class="flex justify-between items-end mb-6">
+                        <div>
+                            <h2 class="text-2xl font-black text-gray-900 flex items-center gap-3"><i
+                                    class="fas fa-star text-emerald-600"></i> Dành Cho Bạn</h2>
+                            <p class="text-sm text-gray-700 mt-1">Cập nhật mới nhất từ hệ thống</p>
+                        </div>
+                        <a href="#" class="text-sm text-indigo-600 font-bold hover:text-indigo-700">Xem tất cả <i
+                                class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-6">
+
+                        <div class="glass-panel p-6 rounded-xl">
+                            <h2 class="text-lg">👨‍🎓 Học sinh</h2>
+                            <p class="text-3xl font-bold mt-2">35</p>
+                        </div>
+
+                        <div class="glass-panel p-6 rounded-xl">
+                            <h2 class="text-lg">📚 Bài tập</h2>
+                            <p class="text-3xl font-bold mt-2">12</p>
+                        </div>
+
+                        <div class="glass-panel p-6 rounded-xl">
+                            <h2 class="text-lg">📅 Tiết hôm nay</h2>
+                            <p class="text-3xl font-bold mt-2">3</p>
+                        </div>
+
+                    </div>
+
+                    <h2 class="text-2xl font-bold mt-10 mb-4">📖 Bài giảng</h2>
+
+                    <div class="grid grid-cols-3 gap-6">
+
+                        <div class="glass-panel p-5 rounded-xl">
+                            <h3 class="font-bold">Toán lớp 8</h3>
+                            <p class="text-sm opacity-70">Chương hàm số</p>
+                            <button class="mt-3 bg-indigo-600 px-4 py-2 rounded">Mở</button>
+                        </div>
+
+                        <div class="glass-panel p-5 rounded-xl">
+                            <h3 class="font-bold">Văn lớp 8</h3>
+                            <p class="text-sm opacity-70">Truyện ngắn</p>
+                            <button class="mt-3 bg-indigo-600 px-4 py-2 rounded">Mở</button>
+                        </div>
+
+                        <div class="glass-panel p-5 rounded-xl">
+                            <h3 class="font-bold">Anh lớp 8</h3>
+                            <p class="text-sm opacity-70">Grammar</p>
+                            <button class="mt-3 bg-indigo-600 px-4 py-2 rounded">Mở</button>
+                        </div>
+
+                    </div>
+                </section>
+    </main>
+
+    <div id="chat-wrapper"
+        class="fixed right-0 bottom-0 w-[350px] h-[600px] max-h-[80vh] z-[100] transform translate-y-[calc(100%-60px)]">
+        <div
+            class="glass-panel w-full h-full rounded-tl-3xl shadow-[-10px_0_30px_rgba(0,0,0,0.5)] border-l border-t border-white/10 flex flex-col">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center cursor-pointer bg-gradient-to-r from-indigo-600/20 to-transparent rounded-tl-3xl"
+                onclick="toggleChat()">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center shadow-[0_0_10px_rgba(79,70,229,0.3)]">
+                        <i class="fas fa-comments text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm">Cộng Đồng Arya</h3>
+                        <p class="text-[10px] text-green-600 flex items-center gap-1"><i
+                                class="fas fa-circle text-[8px] animate-pulse"></i> Trực tuyến</p>
+                    </div>
+                </div>
+                <i id="chat-icon" class="fas fa-chevron-up text-gray-600 transition transform"></i>
+            </div>
+
+            <div id="chat-box" class="flex-1 p-4 overflow-y-auto space-y-4">
+                <div class="text-center text-[10px] text-gray-500 my-2">Hôm nay</div>
+
+                <div class="flex justify-center chat-msg">
+                    <span
+                        class="bg-red-100 text-red-600 border border-red-200 px-3 py-1 rounded-full text-[10px] font-bold">
+                        <i class="fas fa-bullhorn mr-1"></i> Chào mừng đến với phiên bản Premium! (Ctrl+Shift+A để mở
+                        Admin)
+                    </span>
+                </div>
+            </div>
+
+            <div id="typing-box" class="px-4 py-2 hidden">
+                <p class="text-[10px] text-gray-600 flex items-center gap-2">Ai đó đang nhập <span
+                        class="typing-indicator"><span></span><span></span><span></span></span></p>
+            </div>
+
+            <div class="p-4 border-t border-gray-200 bg-gray-50">
+                <div class="relative flex items-center">
+                    <button class="absolute left-3 text-gray-600 hover:text-yellow-600 transition"><i
+                            class="far fa-smile"></i></button>
+                    <input type="text" id="chat-input" onkeypress="handleChatKey(event)"
+                        placeholder="Giao lưu cùng mọi người..."
+                        class="w-full bg-white border border-gray-300 rounded-xl py-3 pl-10 pr-12 text-sm outline-none focus:border-indigo-600 focus:bg-white transition">
+                    <button onclick="sendMsg()"
+                        class="absolute right-2 w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center hover:bg-indigo-700 transition shadow-lg"><i
+                            class="fas fa-paper-plane text-xs text-white"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="playerModal"
+        class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[9999] hidden items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="w-full max-w-6xl relative transform scale-95 transition-transform duration-300" id="playerContent">
+            <button onclick="closePlayer()"
+                class="absolute -top-12 right-0 text-white/50 hover:text-white text-3xl transition"><i
+                    class="fas fa-times-circle"></i></button>
+            <h2 id="playTitle" class="absolute -top-10 left-0 text-xl font-bold text-white"></h2>
+            <div
+                class="aspect-video bg-black rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(99,102,241,0.2)] border border-white/10">
+                <div id="videoContainer" class="w-full h-full flex items-center justify-center"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="uploadModal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-md z-[6000] hidden items-center justify-center">
+        <div class="glass-panel p-8 rounded-[30px] w-[500px] transform transition-all shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-black text-white">Tải Video Lên</h2>
+                <button onclick="closeUpload()" class="text-gray-400 hover:text-red-500 transition"><i
+                        class="fas fa-times text-xl"></i></button>
+            </div>
+
+            <input type="text" id="up-title" placeholder="Nhập tiêu đề video..."
+                class="w-full bg-black/40 border border-white/10 rounded-xl p-4 mb-4 text-white outline-none focus:border-indigo-500 transition">
+
+            <div
+                class="border-2 border-dashed border-indigo-500/50 rounded-2xl p-10 text-center relative hover:bg-indigo-500/10 transition cursor-pointer mb-6 group">
+                <input type="file" id="up-file" accept="video/*" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+                <div
+                    class="w-16 h-16 bg-indigo-500/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition">
+                    <i class="fas fa-cloud-upload-alt text-3xl text-indigo-400"></i>
+                </div>
+                <p id="file-name" class="text-sm font-bold text-gray-300">Kéo thả file vào đây hoặc Click</p>
+                <p class="text-[10px] text-gray-500 mt-2">Hỗ trợ MP4, WebM (Max 100MB)</p>
+            </div>
+
+            <button onclick="startUpload()"
+                class="w-full py-4 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl font-bold text-white shadow-[0_5px_20px_rgba(99,102,241,0.4)] hover:shadow-[0_5px_30px_rgba(168,85,247,0.6)] transition transform hover:-translate-y-1">ĐĂNG
+                TẢI NGAY</button>
+        </div>
+    </div>
+
+    <div id="admin-panel" class="fixed inset-0 bg-[#09090b]/95 z-[10000] hidden flex-col p-10">
+        <div class="flex justify-between items-end mb-10 border-b border-red-500/30 pb-4">
+            <div>
+                <h1
+                    class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">
+                    <i class="fas fa-terminal"></i> OVERRIDE SYSTEM
+                </h1>
+                <p class="text-gray-400 mt-2">Quyền truy cập tối cao - Cẩn thận với các thao tác!</p>
+            </div>
+            <button onclick="closeAdmin()"
+                class="px-8 py-3 bg-red-500/10 border border-red-500 text-red-500 rounded-xl font-bold hover:bg-red-500 hover:text-white transition">ĐÓNG
+                PANEL</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="glass-panel p-6 rounded-2xl border-red-500/20">
+                <h3 class="font-bold text-xl text-white mb-4"><i class="fas fa-database text-red-400 mr-2"></i> User
+                    Database</h3>
+                <div id="admin-users" class="space-y-2 max-h-60 overflow-y-auto custom-scrollbar pr-2"></div>
+                <button onclick="nukeUsers()"
+                    class="w-full mt-4 py-3 bg-red-600 rounded-lg font-bold text-white shadow-[0_0_15px_rgba(239,68,68,0.5)]"><i
+                        class="fas fa-bomb mr-2"></i> Xóa Toàn Bộ User</button>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl border-purple-500/20">
+                <h3 class="font-bold text-xl text-white mb-4"><i class="fas fa-comment-dots text-purple-400 mr-2"></i>
+                    Server Broadcast</h3>
+                <input type="text" id="sys-msg-input" placeholder="Nhập thông báo gửi toàn server..."
+                    class="w-full bg-black/50 border border-white/10 rounded-lg p-3 mb-4 outline-none">
+                <button onclick="sendSystemMsg()"
+                    class="w-full py-3 bg-purple-600 rounded-lg font-bold text-white shadow-[0_0_15px_rgba(168,85,247,0.5)]">Phát
+                    Loa</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* --- KHỞI TẠO --- */
+        let isAdmin = false;
+
+        function init() {
+            document.getElementById('top-email').innerText = currentUser.email;
+            if (currentUser.role === 'admin') {
+                document.getElementById('user-role-text').innerHTML = '<span class="text-red-400"><i class="fas fa-crown"></i> Administrator</span>';
+                document.getElementById('admin-btn').classList.remove('hidden');
+            }
+            fetchEducationalAPI();
+
+            // Random Online Counter
+            setInterval(() => {
+                document.getElementById('online-counter').innerText = (1200 + Math.floor(Math.random() * 50)).toLocaleString();
+            }, 5000);
+        }
+
+        /* --- API & LOAD PHIM --- */
+        async function fetchEducationalAPI() {
+            const grid = document.getElementById('videoGrid');
+            try {
+                // Nội dung giáo dục mẫu thay vì anime
+                const educationalVideos = [
+                    {
+                        title: "Bài Giảng Toán Lớp 10: Phương Trình Bậc Hai",
+                        synopsis: "Hướng dẫn chi tiết cách giải phương trình bậc hai với ví dụ thực tế.",
+                        image: "https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        url: "https://www.youtube.com/watch?v=example1"
+                    },
+                    {
+                        title: "Lịch Sử Việt Nam: Thời Kỳ Bắc Thuộc",
+                        synopsis: "Tìm hiểu về lịch sử Việt Nam trong thời kỳ Bắc thuộc qua các sự kiện quan trọng.",
+                        image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        url: "https://www.youtube.com/watch?v=example2"
+                    },
+                    {
+                        title: "Hóa Học: Bảng Tuần Hoàn Các Nguyên Tố",
+                        synopsis: "Giải thích chi tiết về bảng tuần hoàn và ứng dụng trong đời sống.",
+                        image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        url: "https://www.youtube.com/watch?v=example3"
+                    },
+                    {
+                        title: "Ngữ Văn: Phân Tích Truyện Kiều",
+                        synopsis: "Phân tích tác phẩm Truyện Kiều của Nguyễn Du với góc nhìn hiện đại.",
+                        image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        url: "https://www.youtube.com/watch?v=example4"
+                    },
+                    {
+                        title: "Sinh Học: Tiến Hóa Và Darwin",
+                        synopsis: "Tìm hiểu lý thuyết tiến hóa của Charles Darwin và bằng chứng khoa học.",
+                        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        url: "https://www.youtube.com/watch?v=example5"
+                    },
+                    {
+                        title: "Địa Lý: Biến Đổi Khí Hậu",
+                        synopsis: "Nghiên cứu về biến đổi khí hậu và tác động đến môi trường.",
+                        image: "https://images.unsplash.com/photo-1569163139394-de4e4f43e4e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        url: "https://www.youtube.com/watch?v=example6"
+                    },
+                    {
+                        title: "Tiếng Anh: Grammar Cơ Bản",
+                        synopsis: "Ôn tập ngữ pháp tiếng Anh từ cơ bản đến nâng cao.",
+                        image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        url: "https://www.youtube.com/watch?v=example7"
+                    },
+                    {
+                        title: "Công Nghệ: Lập Trình Python",
+                        synopsis: "Khóa học lập trình Python cho người mới bắt đầu.",
+                        image: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        url: "https://www.youtube.com/watch?v=example8"
+                    }
+                ];
+
+                grid.innerHTML = '';
+                educationalVideos.forEach(video => {
+                    const card = document.createElement('div');
+                    card.className = 'anime-card aspect-[4/5] bg-black cursor-pointer group';
+                    card.onclick = () => openPlayer(video.trailer.embed_url, video.title, true);
+
+                    const score = Math.floor(Math.random() * 5) + 1; // Random score 1-5
+
+                    card.innerHTML = `
+                        <img src="${video.image}" alt="poster">
+                        <div class="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg text-[10px] font-bold text-white border border-white/10">HD 1080p</div>
+                        <div class="absolute top-3 right-3 bg-indigo-500/80 px-2 py-1 rounded-lg text-[10px] font-bold text-white">${score}/5 ⭐</div>
+                        <div class="absolute bottom-0 left-0 right-0 p-4 z-20">
+                            <h3 class="font-bold text-white text-sm truncate group-hover:text-indigo-400 transition">${video.title}</h3>
+                            <p class="text-[10px] text-gray-400 mt-1 line-clamp-2">${video.synopsis}</p>
+                        <div class="play-btn w-14 h-14 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+   <i class="fas fa-play"></i>
+</div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (e) {
+                grid.innerHTML = '<p class="text-red-500 col-span-full text-center">Lỗi tải dữ liệu. Hãy thử lại sau.</p>';
+            }
+        }
+
+        /* --- PLAYER FPT STYLE CẢI TIẾN --- */
+        function openPlayer(url, title, isEmbed) {
+            const modal = document.getElementById('playerModal');
+            const content = document.getElementById('playerContent');
+            const container = document.getElementById('videoContainer');
+
+            document.getElementById('playTitle').innerText = title;
+            modal.style.display = 'flex';
+            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); }, 10);
+
+            if (!url) {
+                container.innerHTML = `<div class="text-center"><i class="fas fa-exclamation-triangle text-5xl text-yellow-500 mb-4"></i><p>Video không khả dụng</p></div>`;
+                return;
+            }
+
+            if (isEmbed) {
+                container.innerHTML = `<iframe src="${url}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>`;
+            } else {
+                container.innerHTML = `<video src="${url}" controls autoplay class="w-full h-full object-contain"></video>`;
+            }
+        }
+
+        function closePlayer() {
+            const modal = document.getElementById('playerModal');
+            const content = document.getElementById('playerContent');
+            modal.classList.add('opacity-0'); content.classList.add('scale-95');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.getElementById('videoContainer').innerHTML = '';
+            }, 300);
+        }
+
+        /* --- UPLOAD LOGIC ẢO DIỆU --- */
+        function openUpload() { document.getElementById('uploadModal').style.display = 'flex'; }
+        function closeUpload() { document.getElementById('uploadModal').style.display = 'none'; }
+
+        document.getElementById('up-file').addEventListener('change', function (e) {
+            if (e.target.files[0]) document.getElementById('file-name').innerText = e.target.files[0].name;
+        });
+
+        function startUpload() {
+            const title = document.getElementById('up-title').value;
+            const file = document.getElementById('up-file').files[0];
+            if (!title || !file) return Swal.fire('Lỗi', 'Bro quên nhập tên hoặc chọn file rồi!', 'warning');
+
+            Swal.fire({
+                title: 'Đang tải lên máy chủ...',
+                html: '<div class="w-full bg-gray-700 rounded-full h-2 mt-2"><div id="prog" class="bg-indigo-500 h-2 rounded-full" style="width: 0%"></div></div><p class="mt-2 text-sm text-gray-400">Đang mã hóa video...</p>',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                didOpen: () => {
+                    let p = 0;
+                    const prog = document.getElementById('prog');
+                    const int = setInterval(() => {
+                        p += Math.random() * 10;
+                        if (p >= 100) {
+                            clearInterval(int);
+                            prog.style.width = '100%';
+                            finishUpload(title, file);
+                        } else {
+                            prog.style.width = p + '%';
+                        }
+                    }, 200);
+                }
+            });
+        }
+
+        function finishUpload(title, file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const grid = document.getElementById('videoGrid');
+                const card = document.createElement('div');
+                card.className = 'anime-card aspect-[4/5] bg-black cursor-pointer group border-2 border-indigo-500/50';
+                card.onclick = () => openPlayer(e.target.result, title, false);
+                card.innerHTML = `
+                    <video src="${e.target.result}" class="absolute inset-0 w-full h-full object-cover opacity-80"></video>
+                    <div class="absolute top-3 left-3 bg-gradient-to-r from-indigo-500 to-purple-500 px-2 py-1 rounded-lg text-[10px] font-bold text-white shadow-lg">Upload của Bạn</div>
+                    <div class="absolute bottom-0 left-0 right-0 p-4 z-20">
+                        <h3 class="font-bold text-white text-sm truncate group-hover:text-indigo-400">${title}</h3>
+                        <p class="text-[10px] text-gray-400 mt-1">Vừa xong</p>
+                    </div>
+                    <div class="play-btn w-14 h-14 bg-indigo-500 rounded-full flex items-center justify-center text-white shadow-[0_0_20px_rgba(99,102,241,0.8)]"><i class="fas fa-play text-xl ml-1"></i></div>
+                `;
+                grid.prepend(card);
+                closeUpload();
+                Swal.fire('Hoàn tất!', 'Video đã được lên sóng toàn cầu.', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        /* --- CHAT BOX XỊN --- */
+        let chatOpen = false;
+        function toggleChat() {
+            const wrapper = document.getElementById('chat-wrapper');
+            const icon = document.getElementById('chat-icon');
+            if (chatOpen) {
+                wrapper.style.transform = 'translateY(calc(100% - 60px))';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                wrapper.style.transform = 'translateY(0)';
+                icon.style.transform = 'rotate(180deg)';
+            }
+            chatOpen = !chatOpen;
+        }
+
+        function sendMsg() {
+            const input = document.getElementById('chat-input');
+            const val = input.value.trim();
+            if (!val) return;
+
+            appendMsg(currentUser.email.split('@')[0], val, currentUser.role === 'admin');
+            input.value = '';
+
+            // Giả lập phản hồi từ AI trợ lý giáo viên
+            setTimeout(() => {
+                const responses = [
+                    "Xin chào! Tôi là trợ lý AI dành cho giáo viên. Bạn có thể hỏi về bài giảng, bài tập hoặc quản lý lớp học.",
+                    "Tôi có thể giúp bạn tạo bài tập, quản lý điểm số hoặc gợi ý phương pháp giảng dạy.",
+                    "Hãy cho tôi biết bạn cần hỗ trợ gì về việc dạy học hôm nay!",
+                    "Bạn muốn tìm tài liệu về môn nào? Tôi sẽ gợi ý cho bạn."
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                appendMsg('AI Trợ Lý', randomResponse, false);
+            }, 1000 + Math.random() * 2000); // Delay ngẫu nhiên 1-3 giây
+        }
+
+        function appendMsg(name, text, isAd) {
+            const box = document.getElementById('chat-box');
+            const msg = document.createElement('div');
+            msg.className = 'chat-msg flex items-start gap-3';
+
+            const avatarColor = isAd ? 'bg-red-500' : 'bg-indigo-600';
+            const nameColor = isAd ? 'text-red-600' : 'text-indigo-600';
+            const badge = isAd ? '<i class="fas fa-crown text-[8px] text-yellow-600 ml-1"></i>' : '';
+
+            msg.innerHTML = `
+                <div class="w-8 h-8 rounded-full ${avatarColor} flex items-center justify-center text-xs font-bold shrink-0 shadow-lg">${name.charAt(0).toUpperCase()}</div>
+                <div class="bg-white/10 border border-gray-200 p-3 rounded-2xl rounded-tl-sm flex-1">
+                    <p class="text-[10px] font-bold ${nameColor} mb-1">${name} ${badge}</p>
+                    <p class="text-sm text-gray-700">${text}</p>
+                </div>
+            `;
+            box.appendChild(msg);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        function toggleSubmenu(id) {
+            const submenu = document.getElementById(id + '-submenu');
+            const icon = document.getElementById(id + '-icon');
+            submenu.classList.toggle('show');
+            icon.classList.toggle('rotate-180');
+        }
+
+        /* --- HỆ THỐNG ADMIN BÍ MẬT NÂNG CẤP --- */
+
+        window.addEventListener('keydown', (e) => {
+            // Tổ hợp: Ctrl + Shift + A
+            if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
+                console.log('Admin key pressed, current user:', currentUser);
+                if (!currentUser || currentUser.role !== 'admin') {
+                    console.log('Not admin user, role:', currentUser?.role);
+                    return Swal.fire({
+                        title: 'Truy cập bị từ chối',
+                        text: 'Bạn không phải Admin.',
+                        icon: 'error',
+                        background: '#09090b',
+                        color: '#fff'
+                    });
+                }
+
+                Swal.fire({
+                    title: 'SYSTEM OVERRIDE',
+                    input: 'password',
+                    background: '#09090b',
+                    color: '#fff',
+                    inputPlaceholder: 'Nhập mã truy cập...',
+                    confirmButtonColor: '#ef4444'
+                }).then((res) => {
+
+                    // Password mã hóa base64 (đỡ lộ hơn)
+                    const secret = atob("YWx5YTEyMw=="); // alya123
+
+                    if (res.value === secret) {
+                        isAdmin = true;
+                        document.getElementById('admin-btn').classList.remove('hidden');
+
+                        Swal.fire({
+                            title: 'Access Granted',
+                            icon: 'success',
+                            background: '#09090b',
+                            color: '#fff',
+                            confirmButtonColor: '#6366f1'
+                        });
+
+                    } else if (res.value) {
+                        Swal.fire({
+                            title: 'Access Denied',
+                            text: 'Mã truy cập sai.',
+                            icon: 'error',
+                            background: '#09090b',
+                            color: '#fff',
+                            confirmButtonColor: '#ef4444'
+                        });
+                    }
+                });
+            }
+        });
+
+        // --- PHẦN FIX CHỨC NĂNG ADMIN (CHỈ THÊM BAN/UNBAN) ---
+        function openAdmin() {
+            document.getElementById('admin-panel').style.display = 'flex';
+            const list = document.getElementById('admin-users');
+            list.innerHTML = ''; // Làm trống danh sách trước khi nạp mới
+
+
+            // Duyệt toàn bộ localStorage để tìm user
+            Object.keys(localStorage).forEach(key => {
+                if (key.startsWith("user_")) {
+                    const userData = JSON.parse(localStorage.getItem(key));
+                    const isBanned = userData.isBanned || false;
+
+                    const userDiv = document.createElement('div');
+                    userDiv.className = "flex justify-between items-center bg-black/50 border border-white/5 p-3 rounded-lg text-sm mb-2 hover:border-indigo-500/50 transition-all";
+
+                    userDiv.innerHTML = `
+                        <div class="flex flex-col">
+                            <span class="${userData.role === 'admin' ? 'text-red-400 font-bold' : 'text-gray-200'} ${isBanned ? 'line-through opacity-40' : ''}">
+                                ${userData.email}
+                            </span>
+                            <span class="text-[9px] font-bold ${isBanned ? 'text-red-500' : 'text-green-500'} uppercase tracking-tighter">
+                                ${isBanned ? '● Đã khóa' : '● Đang hoạt động'}
+                            </span>
+                        </div>
+                        <div class="flex gap-2">
+                            ${userData.role !== 'admin' ? `
+                                <button onclick="toggleBan('${key}')" class="px-3 py-1 rounded text-[10px] font-black transition-all ${isBanned ? 'bg-emerald-600 hover:bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'bg-red-600 hover:bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.3)]'}">
+                                    ${isBanned ? 'ÂN XÁ' : 'BAN'}
+                                </button>
+                            ` : '<span class="text-[10px] bg-indigo-500/20 text-indigo-400 px-2 py-1 rounded border border-indigo-500/30 font-bold">ADMIN</span>'}
+                        </div>
+                    `;
+                    list.appendChild(userDiv);
+                }
+            });
+        }
+
+        // Hàm xử lý khóa/mở khóa tài khoản
+        function toggleBan(storageKey) {
+            console.log('Toggle ban for:', storageKey);
+            let userData = JSON.parse(localStorage.getItem(storageKey));
+            if (!userData) {
+                console.log('User data not found');
+                return;
+            }
+
+            // Đảo trạng thái Ban
+            if (userData.email === currentUser.email) {
+                alert("Không thể tự BAN chính mình!");
+                return;
+            }
+            userData.isBanned = !userData.isBanned;
+            localStorage.setItem(storageKey, JSON.stringify(userData));
+            console.log('Banned status set to:', userData.isBanned);
+
+            // Thông báo ảo diệu bằng SweetAlert2 có sẵn trong code của ông
+            Swal.fire({
+                title: userData.isBanned ? 'Đã thực thi lệnh BAN!' : 'Đã gỡ lệnh cấm!',
+                text: `User ${userData.email} ${userData.isBanned ? 'mày ngu mày chết mẹ mày đi kêu ca cai lòn ' : 'anh bảnh ra rồi .'}`,
+                icon: userData.isBanned ? 'error' : 'success',
+                background: '#09090b',
+                color: '#fff',
+                confirmButtonColor: '#6366f1'
+            });
+
+            openAdmin();
+        }
+
+        function closeAdmin() {
+            document.getElementById('admin-panel').style.display = 'none';
+        }
+
+        function nukeUsers() {
+            Swal.fire({
+                title: 'XÁC NHẬN NUKE?',
+                text: "Tất cả user thường sẽ bị bốc hơi khỏi hệ thống!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'XÓA HẾT!',
+                background: '#09090b',
+                color: '#fff'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Object.keys(localStorage).forEach(key => {
+                        if (key.startsWith("user_")) {
+                            const u = JSON.parse(localStorage.getItem(key));
+                            if (u.role !== 'admin') {
+                                localStorage.removeItem(key);
+                            }
+                        }
+                    });
+                    openAdmin();
+                    Swal.fire({ title: 'Nuked!', text: 'Hệ thống đã được dọn dẹp.', icon: 'success', background: '#09090b', color: '#fff' });
+                }
+            });
+        }
+
+        function sendSystemMsg() {
+            const val = document.getElementById('sys-msg-input').value;
+            if (!val) return;
+            // Mở chat box nếu đang đóng
+            if (!chatOpen) toggleChat();
+
+            const box = document.getElementById('chat-box');
+            const msg = document.createElement('div');
+            msg.className = 'flex justify-center chat-msg';
+            msg.innerHTML = `
+                <span class="bg-red-500/20 text-red-400 border border-red-500/50 px-3 py-1 rounded-full text-[10px] font-bold uppercase shadow-[0_0_15px_rgba(239,68,68,0.5)]">
+                    <i class="fas fa-exclamation-triangle mr-1"></i> SYSTEM: ${val}
+                </span>
+            `;
+            box.appendChild(msg);
+            box.scrollTop = box.scrollHeight;
+            document.getElementById('sys-msg-input').value = '';
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+
+        window.onload = init;
+    </script>
+
+    </div>
+</body>
+
+</html>

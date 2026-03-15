@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Arya_San - Login</title>
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0d1117;
+            color: white;
+            font-family: sans-serif;
+            background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MIfL_Nqu62cVdqVqlDyQfxzVrno5byHm-Q&s') center/cover;
+        }
+
+        .box {
+            background: rgba(22, 27, 34, 0.8);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid #4f8cff;
+            width: 350px;
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            background: #0d1117;
+            color: white;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid #4f8cff;
+            color: #4f8cff;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <h2>Đăng nhập</h2>
+        <form id="loginForm">
+            <input type="email" id="loginEmail" placeholder="Email của bạn" required>
+            <input type="password" id="loginPass" placeholder="Mật khẩu" required>
+            <button type="submit">Vào hệ thống</button>
+        </form>
+    </div>
+
+    <script>
+// Tự động tạo tài khoản admin nếu chưa có
+if (!localStorage.getItem("user_alya@gmail")) {
+    const adminUser = {
+        name: "Alya",
+        email: "alya@gmail",
+        password: "alya123",
+        role: "admin",
+        isBanned: false,
+        createdAt: new Date().toISOString()
+    };
+    localStorage.setItem("user_alya@gmail", JSON.stringify(adminUser));
+    console.log("Tài khoản admin đã được tạo: alya@gmail / alya123");
+}
+
+document.getElementById("loginForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const email = document.getElementById("loginEmail").value.trim();
+    const pass = document.getElementById("loginPass").value;
+    const saved = localStorage.getItem("user_" + email);
+
+    if (saved) {
+        const user = JSON.parse(saved);
+
+        if (user.password === pass) {
+
+            if (user.isBanned === true) {
+                alert("Tài khoản của bạn đã bị khóa bởi Admin!");
+                return;
+            }
+
+            // 🔥 FIX ĐỒNG BỘ
+            localStorage.setItem("currentUser", JSON.stringify(user));
+
+            window.location.href = "index.html";
+
+        } else {
+            alert("Sai mật khẩu!");
+        }
+    } else {
+        alert("Tài khoản chưa tồn tại!");
+    }
+});
+</script>
+</body>
+
+</html>

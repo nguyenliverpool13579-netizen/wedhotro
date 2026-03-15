@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công Cụ Hỗ Trợ Giáo Viên</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.219);
+        }
+    </style>
+</head>
+
+<body class="bg-[#0f172a] text-slate-200 min-h-screen selection:bg-indigo-500/30">
+
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+        <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-indigo-500/10 blur-[120px]"></div>
+        <div class="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] rounded-full bg-purple-500/10 blur-[120px]"></div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-6 py-12">
+        
+        <nav class="mb-16">
+            <a href="index.html" class="group flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                <span class="transition-transform group-hover:-translate-x-1">←</span>
+                <span>Quay lại trang chủ</span>
+            </a>
+        </nav>
+
+        <header class="text-center mb-16">
+            <h1 class="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400 mb-4">
+                Kho Công Cụ Giáo Viên
+            </h1>
+            <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+                Tổng hợp các nền tảng hỗ trợ giảng dạy, sáng tạo nội dung và quản lý lớp học hiệu quả.
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <a href="https://www.canva.com" target="_blank" class="glass-card p-6 rounded-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/10 group">
+                <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-500/30 transition-colors">
+                    <span class="text-2xl">🎨</span>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Canva</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">Thiết kế bài giảng, infographic và tài liệu chuyên nghiệp.</p>
+            </a>
+
+            <a href="https://quizizz.com" target="_blank" class="glass-card p-6 rounded-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-green-500/10 group">
+                <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mb-4 group-hover:bg-green-500/30 transition-colors">
+                    <span class="text-2xl">🧠</span>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Quizizz</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">Tạo câu hỏi trắc nghiệm tương tác trực tiếp tại lớp.</p>
+            </a>
+
+            <a href="https://kahoot.com" target="_blank" class="glass-card p-6 rounded-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-yellow-500/10 group">
+                <div class="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center mb-4 group-hover:bg-yellow-500/30 transition-colors">
+                    <span class="text-2xl">🎮</span>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Kahoot</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">Nền tảng học tập dựa trên trò chơi sôi nổi.</p>
+            </a>
+
+            <a href="https://blooket.com" target="_blank" class="glass-card p-6 rounded-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/10 group">
+                <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mb-4 group-hover:bg-purple-500/30 transition-colors">
+                    <span class="text-2xl">🎯</span>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Blooket</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">Ôn tập kiến thức thông qua các chế độ chơi hấp dẫn.</p>
+            </a>
+
+            <a href="https://slidesgo.com" target="_blank" class="glass-card p-6 rounded-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/10 group">
+                <div class="w-12 h-12 bg-pink-500/20 rounded-lg flex items-center justify-center mb-4 group-hover:bg-pink-500/30 transition-colors">
+                    <span class="text-2xl">📊</span>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Slidesgo</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">Kho template Google Slides và PowerPoint đa dạng.</p>
+            </a>
+
+            <a href="https://manus.im/" target="_blank" class="glass-card p-6 rounded-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-red-500/10 group">
+                <div class="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center mb-4 group-hover:bg-red-500/30 transition-colors">
+                    <span class="text-2xl">🖼</span>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Manus AI</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">Công cụ hỗ trợ tạo slide trình chiếu thông minh.</p>
+            </a>
+
+            <a href="https://edpuzzle.com" target="_blank" class="glass-card p-6 rounded-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-500/10 group">
+                <div class="w-12 h-12 bg-orange-500/20 rounded-lg flex items-center justify-center mb-4 group-hover:bg-orange-500/30 transition-colors">
+                    <span class="text-2xl">🎥</span>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Edpuzzle</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">Biến video thành bài học tương tác có câu hỏi.</p>
+            </a>
+
+            <a href="https://drive.google.com" target="_blank" class="glass-card p-6 rounded-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-500/10 group">
+                <div class="w-12 h-12 bg-indigo-500/20 rounded-lg flex items-center justify-center mb-4 group-hover:bg-indigo-500/30 transition-colors">
+                    <span class="text-2xl">📁</span>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Google Drive</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">Lưu trữ, chia sẻ tài liệu và cộng tác trực tuyến.</p>
+            </a>
+
+        </div>
+
+        <footer class="mt-20 text-center text-slate-500 text-sm">
+            <p>© 2026 Arya_San Project • Chúc các thầy cô dạy tốt!</p>
+        </footer>
+    </div>
+
+</body>
+</html>

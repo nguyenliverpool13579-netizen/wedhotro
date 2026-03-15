@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arya_San - Đăng ký</title>
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0d1117;
+            color: white;
+            font-family: sans-serif;
+            /* Sử dụng cùng ảnh nền với trang đăng nhập để đồng bộ */
+            background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MIfL_Nqu62cVdqVqlDyQfxzVrno5byHm-Q&s') center/cover;
+            margin: 0;
+        }
+
+        .box {
+            background: rgba(22, 27, 34, 0.85);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid #4f8cff;
+            width: 380px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #4f8cff;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            background: #0d1117;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4f8cff;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: #4f8cff;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #3577ff;
+            transform: translateY(-2px);
+        }
+
+        .link-text {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #8b949e;
+        }
+
+        .link-text a {
+            color: #4f8cff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <h2>Tạo tài khoản</h2>
+        <form id="registerForm">
+            <input type="text" id="regName" placeholder="Họ và tên" required>
+            <input type="email" id="regEmail" placeholder="Email (dùng để đăng nhập)" required>
+            <input type="password" id="regPass" placeholder="Mật khẩu" required>
+            <input type="password" id="regConfirmPass" placeholder="Xác nhận mật khẩu" required>
+            <button type="submit">Đăng ký ngay</button>
+        </form>
+        <div class="link-text">
+            Đã có tài khoản? <a href="./dangnhap123.html">Đăng nhập</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById("regName").value.trim();
+            const email = document.getElementById("regEmail").value.trim();
+            const pass = document.getElementById("regPass").value;
+            const confirmPass = document.getElementById("regConfirmPass").value;
+
+            // 1. Kiểm tra mật khẩu khớp nhau
+            if (pass !== confirmPass) {
+                alert("Mật khẩu xác nhận không khớp!");
+                return;
+            }
+
+            // 2. Kiểm tra tài khoản đã tồn tại chưa
+            if (localStorage.getItem("user_" + email)) {
+                alert("Email này đã được đăng ký!");
+                return;
+            }
+
+            // 3. Tạo đối tượng người dùng mới
+            const newUser = {
+                name: name,
+                email: email,
+                password: pass,
+                role: email === 'alya@gmail' ? 'admin' : 'user', // Admin nếu email là alya@gmail
+                isBanned: false,
+                createdAt: new Date().toISOString()
+            };
+
+            // 4. Lưu vào localStorage (giống cấu trúc file đăng nhập của bạn)
+            localStorage.setItem("user_" + email, JSON.stringify(newUser));
+
+            alert("Chúc mừng! Bạn đã đăng ký thành công.");
+            
+            // Chuyển hướng sang trang đăng nhập
+            window.location.href = "dangnhap123.html";
+        });
+    </script>
+</body>
+
+</html>
